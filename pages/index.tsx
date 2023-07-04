@@ -1,118 +1,189 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React, { useState, useEffect } from "react";
+import ContactCard from "@/compnents/card_component";
+import AppBarDrawer from "@/compnents/appbar_drawer";
+import { Grid } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const inter = Inter({ subsets: ['latin'] })
+export default function Home(props: { contactsData: any }) {
+  let { contactsData } = props;
+  const [page, setPage] = React.useState(1);
+  const [displayData, setDisplayData] = React.useState(contactsData.results);
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [natData, setNatData] = React.useState<string[]>([]);
+  const [filterNatData, setFilterNatData] = React.useState("");
+  const [gender, setGender] = React.useState<string | number>("");
+  const [pagesCount, setPagesCount] = React.useState(12);
 
-export default function Home() {
+  const handleChangeGender = (event: any) => {
+    setGender(event.target.value);
+  };
+
+  const handleChangeNationality = (event: any) => {
+    setFilterNatData(event.target.value);
+  };
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  function commonFilter(data: any) {
+    return filterNatData == ""
+      ? gender == 10
+        ? data.gender == "female"
+        : gender == 20
+        ? data.gender == "male"
+        : data
+      : gender == 10
+      ? data.gender == "female" && data.nat == filterNatData
+      : gender == 20
+      ? data.gender == "male" && data.nat == filterNatData
+      : data.nat == filterNatData;
+  }
+
+  function removeDuplicatesa() {
+    let tempArray: string[] = [];
+    tempArray = displayData.map((a: { nat: string }) => a.nat);
+    let unique: any[] = [];
+    tempArray.forEach((element) => {
+      if (!unique.includes(element)) {
+        unique.push(element);
+      }
+    });
+    return unique;
+  }
+
+  useEffect(() => {
+    setDisplayData(contactsData.results.filter(commonFilter));
+    console.log(displayData);
+  }, [gender, filterNatData]);
+
+  useEffect(() => {
+    setPagesCount(Math.ceil(displayData.length / 9));
+    setNatData(removeDuplicatesa);
+  }, [displayData]);
+
+  useEffect(() => {
+    console.log(displayData);
+
+    setFilteredData(
+      displayData.slice(page == 0 ? 0 : (page - 1) * 9, 9 * page)
+    );
+  }, [displayData, page]);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div>
+      <AppBarDrawer></AppBarDrawer>
+      <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={2}>
+            <h1
+              style={{
+                fontSize: "30px",
+              }}
+            >
+              My <span style={{ fontWeight: "bold" }}> Contacts </span>{" "}
+            </h1>
+          </Grid>
+          <Grid
+            style={{ width: "1000px", borderBottom: "solid 2px #000" }}
+            item
+            xs={0}
+            sm={6}
+            md={10}
+          ></Grid>
+        </Grid>
+        <Box
+          sx={{
+            paddingBottom: "10px",
+            paddingTop: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <FormControl style={{ minWidth: "200px", paddingRight: "20px" }}>
+            <InputLabel id="select-gender-label">gender</InputLabel>
+            <Select
+              labelId="select-gender-label"
+              id="select-gender"
+              value={gender}
+              label="gender"
+              onChange={handleChangeGender}
+            >
+              <MenuItem value={""}>Select Gender</MenuItem>
+              <MenuItem value={10}>Female</MenuItem>
+              <MenuItem value={20}>Male</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl style={{ minWidth: "200px" }}>
+            <InputLabel id="select-nationality-label">nationality</InputLabel>
+            <Select
+              labelId="select-nationality-label"
+              id="select-nationality"
+              value={filterNatData}
+              label="nationality"
+              onChange={handleChangeNationality}
+            >
+              <MenuItem value={""}>Select Nationality</MenuItem>
+              {natData.map((e) => (
+                <MenuItem key={e} value={e}>
+                  {e}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Grid container spacing={2}>
+          {filteredData.map(
+            (post: {
+              picture: { large: string };
+              email: string;
+              name: { first: String; last: String; title: String };
+              location: {
+                state: string;
+                postcode: string;
+                street: { name: string; number: number };
+              };
+              cell: string;
+            }) => (
+              <Grid key={post.email} item xs={12} sm={6} md={4}>
+                <div style={{ maxHeight: "125px", overflowY: "hidden" }}>
+                  <ContactCard
+                    picture={post.picture}
+                    email={post.email}
+                    name={post.name}
+                    location={post.location}
+                    cell={post.cell}
+                  />
+                </div>
+              </Grid>
+            )
+          )}
+        </Grid>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Stack spacing={2}>
+          <Pagination
+            count={pagesCount}
+            shape="rounded"
+            onChange={handleChange}
+          />
+        </Stack>
       </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }
+
+Home.getInitialProps = async () => {
+  let contactsData = await (
+    await fetch(`https://randomuser.me/api/?results=100`)
+  ).json();
+  console.log(contactsData);
+  return { contactsData };
+};
