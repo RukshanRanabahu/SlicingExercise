@@ -13,8 +13,23 @@ import MailIcon from "@mui/icons-material/Mail";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Link from "next/link";
+import styles from "./index.module.css";
 
 type Anchor = "right";
+
+const ListItemComponent = (text: any) => {  
+  return (
+    <ListItem key={text.text} disablePadding>
+      <ListItemButton>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText primary={text.text} />
+      </ListItemButton>
+    </ListItem>
+  );
+};
 
 export default function AppBarDrawer() {
   const [state, setState] = React.useState({
@@ -47,28 +62,22 @@ export default function AppBarDrawer() {
     >
       <List>
         {["My Contacts", "My Profile", "Edit Profile"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+          <>
+            {text == "My Profile" ? (
+              <Link href="/profile">
+                <ListItemComponent text={text} />
+              </Link>
+            ) : (
+              <Link href="">
+                <ListItemComponent text={text} />
+              </Link>
+            )}
+          </>
         ))}
       </List>
       <Divider />
       <List>
-        {["Logout"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItemComponent text="Logout" />
       </List>
     </Box>
   );

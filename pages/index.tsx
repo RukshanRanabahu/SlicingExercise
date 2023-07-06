@@ -87,7 +87,7 @@ export default function Home(props: { contactsData: any }) {
                 fontSize: "30px",
               }}
             >
-              My <span style={{ fontWeight: "bold" }}> Contacts </span>{" "}
+              My <span style={{ fontWeight: "bold" }}> Contacts </span>
             </h1>
           </Grid>
           <Grid
