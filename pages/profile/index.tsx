@@ -6,8 +6,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AppBarDrawer from "@/compnents/appbar_drawer";
 import styles from "./index.module.css";
-import { Grid } from "@mui/material";
-import ProfilImg from '../../src/images/profile.png';
+import { Container, Grid, Paper, Stack, styled } from "@mui/material";
+import ProfilImg from "../../src/images/profile.png";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -15,11 +15,11 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+function  TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Box
       role="tabpanel"
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
@@ -28,10 +28,10 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -42,6 +42,11 @@ function a11yProps(index: number) {
   };
 }
 
+const personalDetails = {
+  basicDetails:['First name', 'Last name', 'Email address'],
+  addtionalDetails: []
+}
+
 export default function Profile() {
   const [value, setValue] = React.useState(0);
 
@@ -49,8 +54,17 @@ export default function Profile() {
     setValue(newValue);
   };
 
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+  
+
   return (
-    <div>
+    <Box>
       <AppBarDrawer></AppBarDrawer>
       <Box
         sx={{
@@ -61,15 +75,16 @@ export default function Profile() {
       >
         <Grid container spacing={2}>
           <Grid container spacing={2} style={{ marginBottom: "15px" }}>
-            <Grid xs={0} sm={6} md={3}></Grid>
+            <Grid item xs={0} sm={6} md={3}></Grid>
             <Grid item xs={12} sm={6} md={2}>
-              <h1
+              <Typography
+                variant="h1"
                 style={{
                   fontSize: "30px",
                 }}
               >
                 My <span style={{ fontWeight: "bold" }}> Profile </span>
-              </h1>
+              </Typography>
             </Grid>
             <Grid
               style={{ width: "10px", borderBottom: "solid 2px #000" }}
@@ -86,7 +101,7 @@ export default function Profile() {
               value={value}
               onChange={handleChange}
               aria-label="Vertical tabs example"
-              sx={{ borderRight: 0, borderColor: "divider" }}
+              // sx={{ borderRight: 0, borderColor: "divider" }}
             >
               <Tab
                 style={{ color: "#000" }}
@@ -117,15 +132,72 @@ export default function Profile() {
 
           <Grid item xs={12} sm={8} md={9}>
             <TabPanel value={value} index={0}>
-              <Grid container spacing={2} style={{ marginBottom: "15px" }}>
-                <Grid xs={12} sm={6} md={3}>
-                  <img src={ProfilImg} alt="Profile Image"/>
-                </Grid>
-                <Grid xs={12} sm={6} md={9}></Grid>
-              </Grid>
+              <Stack direction="row" spacing={2}>
+              <img
+                src={ProfilImg.src}
+                alt=""
+                className={styles.profileImage}
+              ></img>
+              <Container className={styles.profileDetails}>
+                <Typography
+                  variant="subtitle1"
+                  lineHeight={2}
+                  fontWeight={"bold"}
+                >
+                  Salutation*
+                </Typography>
+                <Typography lineHeight={3}>{}</Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  First name*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Last name*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Email address*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+              </Container>
+              </Stack>
+              {/* </div> */}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              Item Two
+              {/* <div className={styles.profileDetails}>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Mobile number*
+                </Typography>
+                <Typography lineHeight={3}>{}</Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Home address*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Country*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Postal code*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Mobile number*
+                </Typography>
+                <Typography lineHeight={3}>{}</Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Home address*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Country*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+                <Typography lineHeight={3} fontWeight={"bold"}>
+                  Postal code*
+                </Typography>
+                <Typography lineHeight={3}></Typography>
+              </div> */}
             </TabPanel>
             <TabPanel value={value} index={2}>
               Item Three
@@ -136,6 +208,6 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Box>
-    </div>
+    </Box>
   );
 }

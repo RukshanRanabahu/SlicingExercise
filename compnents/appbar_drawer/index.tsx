@@ -18,7 +18,7 @@ import styles from "./index.module.css";
 
 type Anchor = "right";
 
-const ListItemComponent = (text: any) => {  
+const ListItemComponent = (text: any) => {
   return (
     <ListItem key={text.text} disablePadding>
       <ListItemButton>
@@ -53,39 +53,39 @@ export default function AppBarDrawer() {
       setState({ ...state, [anchor]: open });
     };
 
-  const list = (anchor: Anchor) => (
+  const drawerList = (anchor: Anchor) => (
     <Box
       sx={{ width: 250 }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {["My Contacts", "My Profile", "Edit Profile"].map((text, index) => (
-          <>
+      {["My Contacts", "My Profile", "Edit Profile"].map((text, index) => (
+        <>
+          <List key={text}>
             {text == "My Profile" ? (
-              <Link href="/profile">
-                <ListItemComponent text={text} />
+              <Link href="/profile" key={text}>
+                <ListItemComponent key={text} text={text} />
               </Link>
             ) : (
-              <Link href="">
-                <ListItemComponent text={text} />
+              <Link href="" key={text}>
+                <ListItemComponent key={text} text={text} />
               </Link>
             )}
-          </>
-        ))}
-      </List>
+          </List>
+        </>
+      ))}
       <Divider />
-      <List>
-        <ListItemComponent text="Logout" />
+      <List key="Logout">
+        <ListItemComponent key="Logout" text="Logout" />
       </List>
     </Box>
   );
 
   return (
-    <div>
+    <Box>
       <Box sx={{ flexGrow: 1 }}>
-        <div style={{ display: "flex", padding: "10px" }}>
+        <Box style={{ display: "flex", padding: "10px" }}>
           <Button
             variant="outlined"
             color="inherit"
@@ -110,10 +110,11 @@ export default function AppBarDrawer() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={toggleDrawer("right", true)}
           >
-            <MenuIcon onClick={toggleDrawer("right", true)} />
+            <MenuIcon />
           </IconButton>
-        </div>
+        </Box>
       </Box>
       <React.Fragment>
         <Drawer
@@ -121,9 +122,9 @@ export default function AppBarDrawer() {
           open={state["right"]}
           onClose={toggleDrawer("right", false)}
         >
-          {list("right")}
+          {drawerList("right")}
         </Drawer>
       </React.Fragment>
-    </div>
+    </Box>
   );
 }

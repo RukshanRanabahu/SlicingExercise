@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ContactCard from "@/compnents/card_component";
 import AppBarDrawer from "@/compnents/appbar_drawer";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -60,7 +60,6 @@ export default function Home(props: { contactsData: any }) {
 
   useEffect(() => {
     setDisplayData(contactsData.results.filter(commonFilter));
-    console.log(displayData);
   }, [gender, filterNatData]);
 
   useEffect(() => {
@@ -69,33 +68,31 @@ export default function Home(props: { contactsData: any }) {
   }, [displayData]);
 
   useEffect(() => {
-    console.log(displayData);
-
     setFilteredData(
       displayData.slice(page == 0 ? 0 : (page - 1) * 9, 9 * page)
     );
   }, [displayData, page]);
 
   return (
-    <div>
+    <Box>
       <AppBarDrawer></AppBarDrawer>
-      <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+      <Box style={{ paddingLeft: "20px", paddingRight: "20px" }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={2}>
-            <h1
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h1"
               style={{
-                fontSize: "30px",
+                fontSize: "40px",
               }}
             >
               My <span style={{ fontWeight: "bold" }}> Contacts </span>
-            </h1>
+            </Typography>
           </Grid>
           <Grid
-            style={{ width: "1000px", borderBottom: "solid 2px #000" }}
+            style={{ borderBottom: "solid 2px #000" }}
             item
             xs={0}
             sm={6}
-            md={10}
+            md={9}
           ></Grid>
         </Grid>
         <Box
@@ -153,7 +150,7 @@ export default function Home(props: { contactsData: any }) {
               cell: string;
             }) => (
               <Grid key={post.email} item xs={12} sm={6} md={4}>
-                <div style={{ maxHeight: "125px", overflowY: "hidden" }}>
+                <Box style={{ maxHeight: "125px", overflowY: "hidden" }}>
                   <ContactCard
                     picture={post.picture}
                     email={post.email}
@@ -161,13 +158,13 @@ export default function Home(props: { contactsData: any }) {
                     location={post.location}
                     cell={post.cell}
                   />
-                </div>
+                </Box>
               </Grid>
             )
           )}
         </Grid>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      </Box>
+      <Box style={{ display: "flex", justifyContent: "center" }}>
         <Stack spacing={2}>
           <Pagination
             count={pagesCount}
@@ -175,8 +172,8 @@ export default function Home(props: { contactsData: any }) {
             onChange={handleChange}
           />
         </Stack>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
@@ -184,6 +181,5 @@ Home.getInitialProps = async () => {
   let contactsData = await (
     await fetch(`https://randomuser.me/api/?results=100`)
   ).json();
-  console.log(contactsData);
   return { contactsData };
 };
