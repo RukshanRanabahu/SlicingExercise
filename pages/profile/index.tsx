@@ -6,16 +6,29 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AppBarDrawer from "@/compnents/appbar_drawer";
 import styles from "./index.module.css";
-import { Container, Grid, Paper, Stack, styled } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  styled,
+} from "@mui/material";
 import ProfilImg from "../../src/images/profile.png";
-
+import EditIcon from "@mui/icons-material/Edit";
+import Link from "next/link";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
 
-function  TabPanel(props: TabPanelProps) {
+function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -26,11 +39,7 @@ function  TabPanel(props: TabPanelProps) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </Box>
   );
 }
@@ -43,25 +52,34 @@ function a11yProps(index: number) {
 }
 
 const personalDetails = {
-  basicDetails:['First name', 'Last name', 'Email address'],
-  addtionalDetails: []
-}
+  basicDetails: ["First name", "Last name", "Email address"],
+  addtionalDetails: [],
+};
 
 export default function Profile() {
   const [value, setValue] = React.useState(0);
+  const [edit, setEdit] = React.useState(false);
+  const [sal, setSal] = React.useState("");
 
+  const handlSaleChange = (event: SelectChangeEvent) => {
+    setSal(event.target.value as string);
+  };
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-  
+  const Item = () => {
+    return (
+      <Stack spacing={2} direction="row" className={styles.mgnTop}>
+        <Button variant="contained" color="primary">
+          SAVE & UPDATE
+        </Button>
+        <Button variant="outlined" color="inherit">
+          CANCEL
+        </Button>
+      </Stack>
+    );
+  };
 
   return (
     <Box>
@@ -91,8 +109,28 @@ export default function Profile() {
               item
               xs={0}
               sm={0}
-              md={4}
+              md={3}
             ></Grid>
+            <Grid item xs={0} sm={0} md={1}></Grid>
+            <Grid item xs={0} sm={0} md={3}>
+              <div
+                onClick={() => setEdit(!edit)}
+                className={styles.EditProfileBtn}
+              >
+                Edit Profile
+                <IconButton
+                  style={{ marginRight: "0px", paddingTop: "3px" }}
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  // onClick={}
+                >
+                  <EditIcon className={styles.EditIconBtn} />
+                </IconButton>
+              </div>
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={4} md={3}>
             <Tabs
@@ -133,77 +171,146 @@ export default function Profile() {
           <Grid item xs={12} sm={8} md={9}>
             <TabPanel value={value} index={0}>
               <Stack direction="row" spacing={2}>
-              <img
-                src={ProfilImg.src}
-                alt=""
-                className={styles.profileImage}
-              ></img>
-              <Container className={styles.profileDetails}>
-                <Typography
-                  variant="subtitle1"
-                  lineHeight={2}
-                  fontWeight={"bold"}
-                >
-                  Salutation*
-                </Typography>
-                <Typography lineHeight={3}>{}</Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  First name*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Last name*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Email address*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-              </Container>
+                <img
+                  src={ProfilImg.src}
+                  alt=""
+                  className={styles.profileImage}
+                ></img>
+                <Container className={styles.profileDetails}>
+                  {[
+                    "Salutation",
+                    "First name",
+                    "Last name",
+                    "Email address",
+                  ].map((text, index) => (
+                    <>
+                      <Typography
+                        key={index + text}
+                        variant="subtitle1"
+                        lineHeight={2}
+                        fontWeight={"bold"}
+                      >
+                        {text}*
+                      </Typography>
+                      {edit ? (
+                        text == "Salutation" ? (
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={sal}
+                            label=""
+                            style={{ minWidth: "400px" }}
+                            onChange={handlSaleChange}
+                          >
+                            <MenuItem value={10}>Mr</MenuItem>
+                            <MenuItem value={20}>Miss</MenuItem>
+                            <MenuItem value={30}>Mrs</MenuItem>
+                          </Select>
+                        ) : (
+                          <TextField
+                            style={{ minWidth: "400px" }}
+                            id="outlined-basic"
+                            label=""
+                            variant="outlined"
+                          />
+                        )
+                      ) : (
+                        <Typography lineHeight={3}>--</Typography>
+                      )}
+                    </>
+                  ))}
+                  {edit ? <Item></Item> : <></>}
+                </Container>
               </Stack>
-              {/* </div> */}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              {/* <div className={styles.profileDetails}>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Mobile number*
-                </Typography>
-                <Typography lineHeight={3}>{}</Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Home address*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Country*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Postal code*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Mobile number*
-                </Typography>
-                <Typography lineHeight={3}>{}</Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Home address*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Country*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-                <Typography lineHeight={3} fontWeight={"bold"}>
-                  Postal code*
-                </Typography>
-                <Typography lineHeight={3}></Typography>
-              </div> */}
+              {[
+                "Mobile number",
+                "Home address",
+                "Country",
+                "Postal code",
+                "Nationality",
+                "Date of birth",
+                "Gender",
+                "Marital status",
+              ].map((text, index) => (
+                <>
+                  <Typography
+                    key={index + text}
+                    variant="subtitle1"
+                    lineHeight={2}
+                    fontWeight={"bold"}
+                  >
+                    {text}*
+                  </Typography>
+                  {edit ? (
+                    <TextField
+                      style={{ minWidth: "400px" }}
+                      id="outlined-basic"
+                      label=""
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography lineHeight={2}>--</Typography>
+                  )}
+                </>
+              ))}
+              {edit ? <Item></Item> : <></>}
             </TabPanel>
             <TabPanel value={value} index={2}>
-              Item Three
+              {["Salutation", "First name", "Last name"].map((text, index) => (
+                <>
+                  <Typography
+                    key={index + text}
+                    variant="subtitle1"
+                    lineHeight={2}
+                    fontWeight={"bold"}
+                  >
+                    {text}*
+                  </Typography>
+                  {edit ? (
+                    <TextField
+                      style={{ minWidth: "400px" }}
+                      id="outlined-basic"
+                      label=""
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography lineHeight={3}>--</Typography>
+                  )}
+                </>
+              ))}
+              {edit ? <Item></Item> : <></>}
             </TabPanel>
             <TabPanel value={value} index={3}>
-              Item Four
+              {[
+                "Hobbies and interests",
+                `Favorite sport(s)`,
+                `Preferred music genre(s)`,
+                `Preferred movie/TV show(s)`,
+              ].map((text, index) => (
+                <>
+                  <Typography
+                    key={index + text}
+                    variant="subtitle1"
+                    lineHeight={2}
+                    fontWeight={"bold"}
+                  >
+                    {text}*
+                  </Typography>
+                  {edit ? (
+                    <TextField
+                      style={{ minWidth: "400px" }}
+                      id="outlined-basic"
+                      label=""
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography lineHeight={3}>--</Typography>
+                  )}
+                </>
+              ))}
+              {edit ? <Item></Item> : <></>}
             </TabPanel>
           </Grid>
         </Grid>

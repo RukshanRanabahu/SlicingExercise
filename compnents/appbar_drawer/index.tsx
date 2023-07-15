@@ -62,13 +62,13 @@ export default function AppBarDrawer() {
     >
       {["My Contacts", "My Profile", "Edit Profile"].map((text, index) => (
         <>
-          <List key={text}>
+          <List key={text+index.toString()}>
             {text == "My Profile" ? (
               <Link href="/profile" key={text}>
                 <ListItemComponent key={text} text={text} />
               </Link>
             ) : (
-              <Link href="" key={text}>
+              <Link href="/" key={text}>
                 <ListItemComponent key={text} text={text} />
               </Link>
             )}

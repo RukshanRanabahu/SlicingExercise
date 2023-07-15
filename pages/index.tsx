@@ -150,13 +150,14 @@ export default function Home(props: { contactsData: any }) {
               cell: string;
             }) => (
               <Grid key={post.email} item xs={12} sm={6} md={4}>
-                <Box style={{ maxHeight: "125px", overflowY: "hidden" }}>
+                <Box key={post.email} style={{ maxHeight: "125px", overflowY: "hidden" }}>
                   <ContactCard
                     picture={post.picture}
                     email={post.email}
                     name={post.name}
                     location={post.location}
                     cell={post.cell}
+                    key={post.email}
                   />
                 </Box>
               </Grid>
