@@ -20,7 +20,7 @@ type Anchor = "right";
 
 const ListItemComponent = (text: any) => {
   return (
-    <ListItem key={text.text} disablePadding>
+    <ListItem disablePadding>
       <ListItemButton>
         <ListItemIcon>
           <InboxIcon />
@@ -62,14 +62,14 @@ export default function AppBarDrawer() {
     >
       {["My Contacts", "My Profile", "Edit Profile"].map((text, index) => (
         <>
-          <List key={text+index.toString()}>
+          <List key={index}>
             {text == "My Profile" ? (
-              <Link href="/profile" key={text}>
-                <ListItemComponent key={text} text={text} />
+              <Link href="/profile">
+                <ListItemComponent text={text} />
               </Link>
             ) : (
-              <Link href="/" key={text}>
-                <ListItemComponent key={text} text={text} />
+              <Link href="/">
+                <ListItemComponent text={text} />
               </Link>
             )}
           </List>
@@ -77,7 +77,7 @@ export default function AppBarDrawer() {
       ))}
       <Divider />
       <List key="Logout">
-        <ListItemComponent key="Logout" text="Logout" />
+        <ListItemComponent text="Logout" />
       </List>
     </Box>
   );
@@ -89,11 +89,7 @@ export default function AppBarDrawer() {
           <Button
             variant="outlined"
             color="inherit"
-            style={{
-              paddingLeft: "30px",
-              paddingRight: "30px",
-              marginLeft: "10px",
-            }}
+            className={styles.customButton}
           >
             Logo
           </Button>
@@ -104,7 +100,7 @@ export default function AppBarDrawer() {
           ></Typography>
 
           <IconButton
-            style={{ marginRight: "0px" }}
+            className={styles.customIconButton}
             size="large"
             edge="start"
             color="inherit"

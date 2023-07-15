@@ -121,18 +121,14 @@ export default function Profile() {
                   <>Go back to my profile</>
                 ) : (
                   <>
-                    Edit Profile
-                    <IconButton
-                      style={{ marginRight: "0px", paddingTop: "3px" }}
-                      size="large"
-                      edge="start"
+                    <Button
+                      variant="text"
                       color="inherit"
-                      aria-label="menu"
-                      sx={{ mr: 2 }}
-                      // onClick={}
+                      style={{ height: "3px", fontSize: "10px" }}
+                      endIcon={<EditIcon />}
                     >
-                      <EditIcon className={styles.EditIconBtn} />
-                    </IconButton>
+                      Edit Profile
+                    </Button>
                   </>
                 )}
               </div>
@@ -205,7 +201,7 @@ export default function Profile() {
                             id="demo-simple-select"
                             value={sal}
                             label=""
-                            style={{ minWidth: "400px" }}
+                            className={styles.inputMinWith}
                             onChange={handlSaleChange}
                           >
                             <MenuItem value={10}>Mr</MenuItem>
@@ -214,7 +210,7 @@ export default function Profile() {
                           </Select>
                         ) : (
                           <TextField
-                            style={{ minWidth: "400px" }}
+                            className={styles.inputMinWith}
                             id="outlined-basic"
                             label=""
                             variant="outlined"
@@ -251,7 +247,7 @@ export default function Profile() {
                   </Typography>
                   {edit ? (
                     <TextField
-                      style={{ minWidth: "400px" }}
+                      className={styles.inputMinWith}
                       id="outlined-basic"
                       label=""
                       variant="outlined"
@@ -276,7 +272,7 @@ export default function Profile() {
                   </Typography>
                   {edit ? (
                     <TextField
-                      style={{ minWidth: "400px" }}
+                      className={styles.inputMinWith}
                       id="outlined-basic"
                       label=""
                       variant="outlined"
@@ -306,7 +302,7 @@ export default function Profile() {
                   </Typography>
                   {edit ? (
                     <TextField
-                      style={{ minWidth: "400px" }}
+                      className={styles.inputMinWith}
                       id="outlined-basic"
                       label=""
                       variant="outlined"

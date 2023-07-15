@@ -28,6 +28,9 @@
   padding-top: 3px;
   font-size: 14px;
 }
-.mgnTop{
+.mgnTop {
   margin-top: 20px;
+}
+.inputMinWith {
+  min-width: 400px;
 }
