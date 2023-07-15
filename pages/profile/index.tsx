@@ -117,18 +117,24 @@ export default function Profile() {
                 onClick={() => setEdit(!edit)}
                 className={styles.EditProfileBtn}
               >
-                Edit Profile
-                <IconButton
-                  style={{ marginRight: "0px", paddingTop: "3px" }}
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  sx={{ mr: 2 }}
-                  // onClick={}
-                >
-                  <EditIcon className={styles.EditIconBtn} />
-                </IconButton>
+                {edit ? (
+                  <>Go back to my profile</>
+                ) : (
+                  <>
+                    Edit Profile
+                    <IconButton
+                      style={{ marginRight: "0px", paddingTop: "3px" }}
+                      size="large"
+                      edge="start"
+                      color="inherit"
+                      aria-label="menu"
+                      sx={{ mr: 2 }}
+                      // onClick={}
+                    >
+                      <EditIcon className={styles.EditIconBtn} />
+                    </IconButton>
+                  </>
+                )}
               </div>
             </Grid>
           </Grid>
